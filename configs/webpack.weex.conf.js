@@ -22,31 +22,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 
 
-/**
- * Generate multiple entrys
- * @param {Array} entry
- */
-const generateMultipleEntrys = (entry) => {
-  let entrys = Object.keys(entry);
-  console.log("entrys", entrys);
-  // exclude vendor entry.
-  entrys = entrys.filter(entry => entry !== 'vendor' );
-  const htmlPlugin = entrys.map(name => {
-    return new HtmlWebpackPlugin({
-      filename: name + '.html',
-      template: helper.rootNode(`web/index.html`),
-      isDevServer: true,
-      chunksSortMode: 'dependency',
-      inject: true,
-      chunks: [name],
-      // production
-      minimize: true
-    })
-  })
-  return htmlPlugin;
-}
-
-
 // Wraping the entry file for native.
 const getNativeEntryFileContent = (entryPath, vueFilePath) => {
   let relativeVuePath = path.relative(path.join(entryPath, '../'), vueFilePath);
