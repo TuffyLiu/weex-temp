@@ -21,6 +21,7 @@ const UglifyJsparallelPlugin = require('webpack-uglify-parallel');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 
+
 /**
  * Generate multiple entrys
  * @param {Array} entry
