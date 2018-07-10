@@ -8,7 +8,9 @@ const vueLoaderConfig = require('./vue-loader.conf');
 const vueWebTemp = helper.rootNode(config.templateDir);
 const isWin = /^win/.test(process.platform);
 const weexEntry = {};
+
 const packageConfig = require('../package.json')
+var ManifestPlugin = require('webpack-manifest-plugin')
 
 const os = require('os');
 
@@ -21,7 +23,10 @@ const UglifyJsparallelPlugin = require('webpack-uglify-parallel');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 
+const makePageHash = () => {
 
+}
+const pageHash = makePageHash();
 // Wraping the entry file for native.
 const getNativeEntryFileContent = (entryPath, vueFilePath) => {
   let relativeVuePath = path.relative(path.join(entryPath, '../'), vueFilePath);
@@ -29,7 +34,8 @@ const getNativeEntryFileContent = (entryPath, vueFilePath) => {
   if (isWin) {
     relativeVuePath = relativeVuePath.replace(/\\/g, '\\\\');
   }
-  contents += `import App from '${relativeVuePath}'
+  contents += `weex.config.pageHash = 'ddddd'
+import App from '${relativeVuePath}'
 App.el = '#root'
 new Vue(App)
 `;
@@ -53,6 +59,8 @@ const getEntryFile = (dir) => {
 
 // Generate an entry file array before writing a webpack configuration
 getEntryFile(config.pageDir);
+
+
 
 const createLintingRule = () => ({
   test: /\.(js|vue)$/,
@@ -129,7 +137,7 @@ const weexConfig = {
    *
    * See: http://webpack.github.io/docs/configuration.html#plugins
    */
-  plugins: plugins,
+  plugins: [new ManifestPlugin({publicPath: config.sourceDir}), ...plugins],
   /*
   * Include polyfills or mocks for various node stuff
   * Description: Node configuration
@@ -143,6 +151,8 @@ const weexConfig = {
 /**
  * Webpack configuration for weex.
  */
+console.log(weexConfig);
+
 const productionConfig = webpackMerge(weexConfig, {
   /**
    * Options affecting the output of the compilation.
@@ -162,7 +172,7 @@ const productionConfig = webpackMerge(weexConfig, {
      *
      * See: http://webpack.github.io/docs/configuration.html#output-filename
      */
-    filename: '[name]_' + packageConfig.version + '_[chunkhash:16].js'
+    filename: '[name]_' + packageConfig.version + '_[hash:16].js'
   },
   /*
    * Add additional plugins to the compiler.
@@ -177,6 +187,8 @@ const productionConfig = webpackMerge(weexConfig, {
      *
      * See: https://www.npmjs.com/package/webpack-uglify-parallel
      */
+
+
     new UglifyJsparallelPlugin({
       workers: os.cpus().length,
       mangle: true,
@@ -185,8 +197,8 @@ const productionConfig = webpackMerge(weexConfig, {
         drop_console: true,
         drop_debugger: true
       }
-  })
-  ,
+  }),
+
   // Need to run uglify first, then pipe other webpack plugins
   ...weexConfig.plugins
   ]

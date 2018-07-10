@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <image :src="logo" class="logo" />
-    <text class="greeting">The environment is ready!</text>
+    <text class="greeting">The environment is ready!{{hash}}</text>
     <HelloWorld/>
   </div>
 </template>
@@ -15,6 +15,7 @@ export default {
   },
   data () {
     return {
+      hash: weex.config,
       logo: 'https://gw.alicdn.com/tfs/TB1yopEdgoQMeJjy1XaXXcSsFXa-640-302.png'
     }
   }
