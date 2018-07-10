@@ -9,6 +9,7 @@ const config = {
   // router
   // common
   sourceDir: 'src',
+  pageDir: 'src/page',
   templateDir: '.temp',
   entryFilePath: 'entry.js',
   // Module exclude from compile process

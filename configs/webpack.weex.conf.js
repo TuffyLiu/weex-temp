@@ -8,7 +8,7 @@ const vueLoaderConfig = require('./vue-loader.conf');
 const vueWebTemp = helper.rootNode(config.templateDir);
 const isWin = /^win/.test(process.platform);
 const weexEntry = {};
-
+const packageConfig = require('../package.json')
 
 const os = require('os');
 
@@ -52,7 +52,7 @@ const getEntryFile = (dir) => {
 }
 
 // Generate an entry file array before writing a webpack configuration
-getEntryFile();
+getEntryFile(config.pageDir);
 
 const createLintingRule = () => ({
   test: /\.(js|vue)$/,
@@ -162,7 +162,7 @@ const productionConfig = webpackMerge(weexConfig, {
      *
      * See: http://webpack.github.io/docs/configuration.html#output-filename
      */
-    filename: '[name].js'
+    filename: '[name]_' + packageConfig.version + '_[chunkhash:16].js'
   },
   /*
    * Add additional plugins to the compiler.

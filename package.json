@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "start": "npm run serve",
-    "weex": "webpack --env.NODE_ENV=weex",
+    "weex": "rimraf ./release/weex && webpack --env.NODE_ENV=weex",
     "build": "webpack --env.NODE_ENV=common",
     "build:prod": "webpack --env.NODE_ENV=production",
     "build:prod:web": "webpack --env.NODE_ENV=release",
@@ -67,7 +67,7 @@
     "vue-loader": "^12.2.0",
     "vue-style-loader": "^3.0.3",
     "vue-template-compiler": "^2.5.11",
-    "webpack": "^3.10.0",
+    "webpack": "^3.12.0",
     "webpack-dev-server": "^2.9.7",
     "webpack-merge": "^4.1.0",
     "webpack-uglify-parallel": "^0.1.4",

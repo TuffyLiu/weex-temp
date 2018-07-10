@@ -48,7 +48,7 @@ const getNativeEntryFileContent = (entryPath, vueFilePath) => {
 App.el = '#root'
 new Vue(App)
 `;
-  
+
   return contents;
 }
 
@@ -69,7 +69,7 @@ const getEntryFile = (dir) => {
 }
 
 // Generate an entry file array before writing a webpack configuration
-getEntryFile();
+getEntryFile(config.pageDir);
 
 
 const createLintingRule = () => ({
@@ -125,7 +125,7 @@ const webConfig = {
    * See: http://webpack.github.io/docs/configuration.html#module
    */
   module: {
-    // webpack 2.0 
+    // webpack 2.0
     rules: useEslint.concat([
       {
         test: /\.js$/,
@@ -165,7 +165,7 @@ const webConfig = {
                 }
               }
             ]
-            
+
           })
         }],
         exclude: config.excludeModuleReg
