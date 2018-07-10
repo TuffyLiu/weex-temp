@@ -63,14 +63,6 @@ new Vue(App)
 }
 
 
-
-const getBaseFile = ( ) => {
-    const entryPath =  path.join(vueWebTemp, 'entry' + '.js');
-    let relativeEntryPath = helper.root(config.entryFilePath);
-    let entryContents = fs.readFileSync(relativeEntryPath).toString();
-    fs.outputFileSync(entryPath, entryContents);
-    weexEntry['entry'] = entryPath;
-}
 // Retrieve entry file mappings by function recursion
 const getEntryFile = (dir) => {
   dir = dir || config.sourceDir;
@@ -86,7 +78,6 @@ const getEntryFile = (dir) => {
 
 // Generate an entry file array before writing a webpack configuration
 getEntryFile();
-getBaseFile();
 
 const createLintingRule = () => ({
   test: /\.(js|vue)$/,
@@ -177,7 +168,7 @@ const weexConfig = {
 /**
  * Webpack configuration for weex.
  */
-const weexConfig2 = webpackMerge(weexConfig[1], {
+const productionConfig = webpackMerge(weexConfig, {
   /**
    * Options affecting the output of the compilation.
    *
@@ -189,7 +180,7 @@ const weexConfig2 = webpackMerge(weexConfig[1], {
      *
      * See: http://webpack.github.io/docs/configuration.html#output-path
      */
-    path: helper.rootNode('dist'),
+    path: helper.rootNode('release/weex'),
     /**
      * Specifies the name of each output file on disk.
      * IMPORTANT: You must not specify an absolute path here!
@@ -219,118 +210,12 @@ const weexConfig2 = webpackMerge(weexConfig[1], {
         drop_console: true,
         drop_debugger: true
       }
-    })
+  })
+  ,
+  // Need to run uglify first, then pipe other webpack plugins
+  ...weexConfig.plugins
   ]
 })
-
-const productionConfig = webpackMerge(weexConfig, {
-  /**
-   * Developer tool to enhance debugging
-   *
-   * See: http://webpack.github.io/docs/configuration.html#devtool
-   * See: https://github.com/webpack/docs/wiki/build-performance#sourcemaps
-   */
-  devtool: config.prod.devtool,
-  /**
-   * Options affecting the output of the compilation.
-   *
-   * See: http://webpack.github.io/docs/configuration.html#output
-   */
-  output: {
-    /**
-     * The output directory as absolute path (required).
-     *
-     * See: http://webpack.github.io/docs/configuration.html#output-path
-     */
-    path: helper.rootNode('release/web'),
-    /**
-     * Specifies the name of each output file on disk.
-     * IMPORTANT: You must not specify an absolute path here!
-     *
-     * See: http://webpack.github.io/docs/configuration.html#output-filename
-     */
-    filename: '[name].[chunkhash].bundle.js',
-    /**
-     * The filename of the SourceMaps for the JavaScript files.
-     * They are inside the output.path directory.
-     *
-     * See: http://webpack.github.io/docs/configuration.html#output-sourcemapfilename
-     */
-    sourceMapFilename: '[name].[chunkhash].bundle.map',
-    /**
-     * The filename of non-entry chunks as relative path
-     * inside the output.path directory.
-     *
-     * See: http://webpack.github.io/docs/configuration.html#output-chunkfilename
-     */
-    chunkFilename: '[id].[chunkhash].chunk.js'
-  },
-  /*
-   * Add additional plugins to the compiler.
-   *
-   * See: http://webpack.github.io/docs/configuration.html#plugins
-   */
-  plugins: [
-    /**
-     * Plugin: webpack.DefinePlugin
-     * Description: The DefinePlugin allows you to create global constants which can be configured at compile time.
-     *
-     * See: https://webpack.js.org/plugins/define-plugin/
-     */
-    new webpack.DefinePlugin({
-      'process.env': {
-        'NODE_ENV': config.prod.env
-      }
-    }),
-    /*
-     * Plugin: UglifyJsPlugin
-     * Description: Minimize all JavaScript output of chunks.
-     * Loaders are switched into minimizing mode.
-     *
-     * See: https://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
-     */
-    ...generateMultipleEntrys(weexConfig.entry),
-    /*
-     * Plugin: HtmlWebpackPlugin
-     * Description: Simplifies creation of HTML files to serve your webpack bundles.
-     * This is especially useful for webpack bundles that include a hash in the filename
-     * which changes every compilation.
-     *
-     * See: https://github.com/ampedandwired/html-webpack-plugin
-     */
-    new HtmlWebpackPlugin({
-      template: 'web/index.html',
-      chunksSortMode: 'dependency',
-      inject: 'head'
-    }),
-    /*
-     * Plugin: ScriptExtHtmlWebpackPlugin
-     * Description: Enhances html-webpack-plugin functionality
-     * with different deployment options for your scripts including:
-     *
-     * See: https://github.com/numical/script-ext-html-webpack-plugin
-     */
-    new ScriptExtHtmlWebpackPlugin({
-      defaultAttribute: 'defer'
-    }),
-    /*
-     * Plugin: UglifyJsparallelPlugin
-     * Description: Identical to standard uglify webpack plugin
-     * with an option to build multiple files in parallel
-     *
-     * See: https://www.npmjs.com/package/webpack-uglify-parallel
-     */
-    new UglifyJsparallelPlugin({
-      workers: os.cpus().length,
-      mangle: true,
-      compressor: {
-        warnings: false,
-        drop_console: true,
-        drop_debugger: true
-      }
-    })
-  ]
-});
 
 module.exports = [weexConfig, productionConfig];
 
