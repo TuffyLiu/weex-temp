@@ -1,62 +1,73 @@
-//const pageMapHash = '';
-const PAGEMAPHASH = null;
-
-// 跳转远程bundle的url
-let timer = null;
-export function jumpRemotePage(options, querystring) {
-    const baseUrl = PAGEMAPHASH ? new Buffer(PAGEMAPHASH, 'hex').toString() : '';
-    const token = baseUrl.slice(-1, 16);
-    let bundleUrl = typeof options === 'string' ? options : (options.weexPage ? options.weexPage : '');
-    bundleUrl += baseUrl;
-    if (typeof querystring === 'object' && querystring !== null) {
-        bundleUrl += stringifyParamets(querystring, token) ? ('/' + stringifyParamets(querystring, token)) : '';
+const navigator = weex.requireModule('navigator');
+/*
+ * 根据page名跳转对应的页面 web测试端/native端
+ * @param options {weexPage:'index'}  querystring {id: 9, name:'rrr'}
+ */
+function jumpPage(options, query) {
+    let bundleUrl = weex.config.bundleUrl;
+    let platform = weex.config.env.platform;
+    if (typeof options === 'string') {
+        /*
+         * jump to exact url
+         */
+        bundleUrl = options;
+    } else if (platform === 'Web') {
+        /*
+         * for development in web
+         */
+        let weexPage = options.weexPage + '.html';
+        let filePath = bundleUrl.match(/.+\/(.+)$/)[1];
+        bundleUrl = bundleUrl.replace(filePath, weexPage);
+    } else {
+        /*
+         * for native
+         */
+        let filePath = bundleUrl.match(/.+\/(.+)$/)[1];
+        let pageHash = filePath.match(/.+_(.+).js?(.+)$/);
+        let weexPage = pageHash === null ? options.weexPage : options.weexPage + '_' + pageHash[1];
+        weexPage += '.js';
+        bundleUrl = bundleUrl.replace(filePath, weexPage);
     }
-    // hack
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-        weex.requireModule('navigator').push({
-            'url': typeof options === 'string' ? bundleUrl : 'wxhellotalk://weex/' + bundleUrl,
-            'animated': 'true'
-        }, function(event) {
-            // console.log(event);
-        });
-    }, 200);
+    bundleUrl += '?' + objToParams(query) || '';
+    navigator.push({
+        url: bundleUrl,
+        animated: 'true'
+    }, e => {
+        console.log(e);
+    });
 }
 
-//加密组装queryString
-function stringifyParamets(obj, token) {
+/*
+ * 转换 obj 为 url params参数
+ * @param obj 传入字符串
+ * @returns {String}
+ */
+function objToParams(obj) {
     let str = '';
-    if (!obj || Object.keys(obj).length === 0) {
-        return str;
-    }
     for (let key in obj) {
-        str += (key + '=' + encodeURIComponent(obj[key]) + '&');
+        if (str !== '') {
+            str += '&';
+        }
+        str += key + '=' + encodeURIComponent(obj[key]);
     }
-    let stringifyStr = xtea.xTEAEncryptWithKey(str.substr(0, str.length - 1), token); //进行加密
-    stringifyStr = toBuffer(stringifyStr);
-    return new Buffer(token).toString('hex') + stringifyStr.toString('hex');
+    return str;
 }
-
-function getQueryString(str) {
-    let result = str.match(new RegExp("[\?\&][^\?\&]+=[^\?\&]+", "g"));
-    if (result == null) {
-        return "";
-    }
-    for (let i = 0; i < result.length; i++) {
-        result[i] = result[i].substring(1);
-    }
-    return result;
-}
-// 提取页面上的参数
-export function parseQueryString(str) {
-    if (typeof str !== 'string') {
-        return '';
-    }
+/*
+ * 转换 url params参数为obj
+ * @param str 传入url参数字符串
+ * @returns {Object}
+ */
+function paramsToObj(str) {
     let obj = {};
-    if (getQueryString(str) && getQueryString(str).forEach) {
-        getQueryString(str).forEach(item => {
-            obj[item.split('=')[0]] = decodeURIComponent(item.split('=')[1]);
-        });
+    try {
+        obj = JSON.parse('{"' + decodeURI(str).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
+    } catch (e) {
+        console.log(e);
     }
     return obj;
 }
+export {
+    objToParams,
+    paramsToObj,
+    jumpPage
+};
