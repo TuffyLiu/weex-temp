@@ -7,6 +7,7 @@
   "scripts": {
     "start": "npm run serve",
     "weex": "rimraf ./release/weex && webpack --env.NODE_ENV=weex",
+    "weex:release": "rimraf ./release/weex && webpack --env.NODE_ENV=weex:release",
     "build": "webpack --env.NODE_ENV=common",
     "build:prod": "webpack --env.NODE_ENV=production",
     "build:prod:web": "webpack --env.NODE_ENV=release",
@@ -34,6 +35,7 @@
     "weex-vue-render": "^1.0.17"
   },
   "devDependencies": {
+    "aliyunoss-webpack-plugin": "^0.2.1",
     "autoprefixer": "^8.0.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.1",

@@ -1,8 +1,11 @@
 <template>
 <div class="wrapper">
-    <image :src="logo" class="logo" @click="onclick" />
+    <image :src="logo" class="logo"/>
     <text class="greeting">The environment is ready!{{hash}}</text>
     <HelloWorld/>
+    <div @click="onClicked">
+       <text>点击跳转page2</text>
+    </div>
 </div>
 </template>
 
@@ -23,7 +26,7 @@ export default {
         };
     },
     methods: {
-        onclick(e) {
+        onClicked(e) {
             jumpPage({
                 weexPage: 'page2'
             }, {

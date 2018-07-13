@@ -14,7 +14,6 @@ var ManifestPlugin = require('webpack-manifest-plugin')
 
 const os = require('os');
 
-
 /**
  * Webpack Plugins
  */
@@ -166,7 +165,7 @@ const productionConfig = webpackMerge(weexConfig, {
          *
          * See: http://webpack.github.io/docs/configuration.html#output-filename
          */
-        filename: '[name]_' + '[hash:16].js'
+        filename: '[name]_' + packageConfig.version + '_[chunkhash:16].js'
     },
     /*
      * Add additional plugins to the compiler.
@@ -192,10 +191,9 @@ const productionConfig = webpackMerge(weexConfig, {
                 drop_debugger: true
             }
         }),
-
         // Need to run uglify first, then pipe other webpack plugins
         ...weexConfig.plugins
     ]
 })
 
-module.exports = [weexConfig, productionConfig];
+module.exports =  [weexConfig, productionConfig];

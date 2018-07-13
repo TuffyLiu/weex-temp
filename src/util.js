@@ -11,24 +11,35 @@ function jumpPage(options, query) {
          * jump to exact url
          */
         bundleUrl = options;
-    } else if (platform === 'Web') {
+        navigatorJump(bundleUrl, query);
+    } else if (navigator.gotoPage) {
         /*
-         * for development in web
+         * jump by HelloTalk native
          */
-        let weexPage = options.weexPage + '.html';
-        let filePath = bundleUrl.match(/.+\/(.+)$/)[1];
-        bundleUrl = bundleUrl.replace(filePath, weexPage);
+        navigator.gotoPage(
+            {
+                url: options.weexPage,
+                data: query
+            }, (e) => {
+                console.log(e);
+            });
     } else {
         /*
-         * for native
+         * jump for test
          */
+        let weexPage = options.weexPage + (platform === 'Web' ? '.html' : '.js');
         let filePath = bundleUrl.match(/.+\/(.+)$/)[1];
-        let pageHash = filePath.match(/.+_(.+).js?(.+)$/);
-        let weexPage = pageHash === null ? options.weexPage : options.weexPage + '_' + pageHash[1];
-        weexPage += '.js';
         bundleUrl = bundleUrl.replace(filePath, weexPage);
+        navigatorJump(bundleUrl, query);
     }
-    bundleUrl += '?' + objToParams(query) || '';
+}
+
+/*
+ * 调用原生的weex跳转
+ * @param options {weexPage:'index'}  querystring {id: 9, name:'rrr'}
+ */
+function navigatorJump(bundleUrl, query) {
+    bundleUrl += '?' + objToParams(query);
     navigator.push({
         url: bundleUrl,
         animated: 'true'
