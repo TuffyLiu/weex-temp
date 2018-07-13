@@ -5,3 +5,16 @@
 2.添加了 npm run weex 命令来打包文件，如需直接上传阿里云，使用npm run weex:release命令  
 3.在./src/util.js中添加了针对HelloWork客户端开发所需要的公共方法  
 4.navigator.gotoPage为HelloWork客户端提供的特殊接口（[接口列表](https://www.tapd.cn/20331431/markdown_wikis/#1120331431001000852)）  
+5.如需上传阿里云，请配置config.js文件中的cdn服务器参数([参数配置说明](https://npm.taobao.org/package/aliyunoss-webpack-plugin))
+`
+weex: {
+  cdn: {
+      cdnUrl: '',
+      accessKeyId: '',
+      accessKeySecret: '',
+      region: '',
+      bucket: ''
+  }
+}
+
+`
