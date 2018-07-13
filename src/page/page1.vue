@@ -1,7 +1,7 @@
 <template>
 <div class="wrapper">
     <image :src="logo" class="logo"/>
-    <text class="greeting">The environment is ready!{{hash}}</text>
+    <text class="greeting">The environment is ready!</text>
     <HelloWorld/>
     <div @click="onClicked">
        <text>点击跳转page2</text>
@@ -21,7 +21,6 @@ export default {
     },
     data() {
         return {
-            hash: '',
             logo: 'https://gw.alicdn.com/tfs/TB1yopEdgoQMeJjy1XaXXcSsFXa-640-302.png'
         };
     },

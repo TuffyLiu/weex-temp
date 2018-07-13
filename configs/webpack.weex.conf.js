@@ -29,8 +29,7 @@ const getNativeEntryFileContent = (entryPath, vueFilePath) => {
     if (isWin) {
         relativeVuePath = relativeVuePath.replace(/\\/g, '\\\\');
     }
-    contents += `weex.config.pageHash = 'ddddd'
-import App from '${relativeVuePath}'
+    contents += `import App from '${relativeVuePath}'
 App.el = '#root'
 new Vue(App)
 `;
