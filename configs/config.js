@@ -22,11 +22,11 @@ const config = {
   entryFilterOptions: {},
   weex: {
     cdn: {
-        cdnUrl: 'https://ali-hk-cdn.hellotalk8.com/openEnglish3.0/test/',
-        accessKeyId: 'ULuE3LK66Y6ZlEWS',
-        accessKeySecret: 'JTFyxX7TW9K1TSVMwglj272CxfvwUC',
-        region: 'oss-cn-hongkong',
-        bucket: 'ht-blog'
+        cdnUrl: '',
+        accessKeyId: '',
+        accessKeySecret: '',
+        region: '',
+        bucket: ''
     }
   },
   dev: {
