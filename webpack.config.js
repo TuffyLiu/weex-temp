@@ -22,7 +22,6 @@ module.exports = env => {
     case 'weex':
       webpackConfig = require('./configs/webpack.weex.conf');
       break;
-      break;
     case 'weex:release':
       webpackConfig = require('./configs/webpack.weex-release.conf');
       break;
