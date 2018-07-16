@@ -17,3 +17,11 @@ weex: {
   }
 }
 ```
+6.要求样式尺寸按照375px来写。见./src/pageEntry.js，这个文件只有weex客户端才加载，网页端加载的文件为./src/entry.js
+```javascript
+const meta = weex.requireModule('meta');
+meta.setViewport({
+  width: weex.config.viewport || 375
+});
+//设置客户端页面的显示宽度为客户端的页面点数
+```
