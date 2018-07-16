@@ -3,8 +3,9 @@
     <image :src="logo" class="logo"/>
     <text class="greeting">The environment is ready!</text>
     <HelloWorld/>
+    <text class="message">{{config}}</text>
     <div @click="onClicked">
-       <text>点击跳转page2</text>
+       <text class="message">点击跳转page2</text>
     </div>
 </div>
 </template>
@@ -21,6 +22,7 @@ export default {
     },
     data() {
         return {
+            config: weex.config.env,
             logo: 'https://gw.alicdn.com/tfs/TB1yopEdgoQMeJjy1XaXXcSsFXa-640-302.png'
         };
     },
@@ -43,20 +45,20 @@ export default {
 }
 
 .logo {
-    width: 424px;
-    height: 200px;
+    width: 212px;
+    height: 100px;
 }
 
 .greeting {
     text-align: center;
-    margin-top: 70px;
-    font-size: 50px;
+    margin-top: 35px;
+    font-size: 25px;
     color: #41B883;
 }
 
 .message {
-    margin: 30px;
-    font-size: 32px;
+    margin: 15px;
+    font-size: 16px;
     color: #727272;
 }
 </style>

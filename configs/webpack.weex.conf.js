@@ -24,19 +24,21 @@ const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 
 // Wraping the entry file for native.
 const getNativeEntryFileContent = (entryPath, vueFilePath) => {
+    let relativePageEntryPath = helper.root(config.pageEntryFilePath);
     let relativeVuePath = path.relative(path.join(entryPath, '../'), vueFilePath);
     let contents = '';
     if (isWin) {
         relativeVuePath = relativeVuePath.replace(/\\/g, '\\\\');
     }
+    let pageEntryContents = fs.readFileSync(relativePageEntryPath).toString();
     contents += `import App from '${relativeVuePath}'
 App.el = '#root'
+${pageEntryContents}
 new Vue(App)
 `;
 
     return contents;
 }
-
 
 // Retrieve entry file mappings by function recursion
 const getEntryFile = (dir) => {

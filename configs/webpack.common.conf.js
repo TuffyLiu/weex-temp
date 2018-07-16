@@ -25,7 +25,6 @@ const getWebEntryFileContent = (entryPath, vueFilePath) => {
     }
     if (hasPluginInstalled) {
         contents += `\n// If detact plugins/plugin.js is exist, import and the plugin.js\n`;
-        contents += `import plugins from '${relativePluginPath}';\n`;
         contents += `plugins.forEach(function (plugin) {\n\tweex.install(plugin)\n});\n\n`;
         entryContents = entryContents.replace(/weex\.init/, match => `${contents}${match}`);
         contents = ''
@@ -39,13 +38,16 @@ new Vue(Vue.util.extend({el: '#root'}, App));
 
 // Wraping the entry file for native.
 const getNativeEntryFileContent = (entryPath, vueFilePath) => {
+    let relativePageEntryPath = helper.root(config.pageEntryFilePath);
     let relativeVuePath = path.relative(path.join(entryPath, '../'), vueFilePath);
     let contents = '';
     if (isWin) {
         relativeVuePath = relativeVuePath.replace(/\\/g, '\\\\');
     }
+    let pageEntryContents = fs.readFileSync(relativePageEntryPath).toString();
     contents += `import App from '${relativeVuePath}'
 App.el = '#root'
+${pageEntryContents}
 new Vue(App)
 `;
 
@@ -154,7 +156,7 @@ const webConfig = {
                             }),
                             require('postcss-plugin-px2rem')({
                                 // base on 750px standard.
-                                rootValue: 75,
+                                rootValue: 75 / 2,
                                 // to leave 1px alone.
                                 minPixelValue: 1.01
                             })
