@@ -12,6 +12,7 @@ const config = {
   pageDir: 'src/page',
   templateDir: '.temp',
   entryFilePath: 'entry.js',
+  pageEntryFilePath: 'pageEntry.js',
   // Module exclude from compile process
   excludeModuleReg: /node_modules(?!(\/|\\).*(weex).*)/,
   // Filter for entry files

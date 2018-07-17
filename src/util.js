@@ -1,9 +1,21 @@
 const navigator = weex.requireModule('navigator');
 /*
+ * throttle 函数截流，以防多次点击跳转
+ */
+let JumpTimer = null;
+function jumpPage(options, query) {
+    if (JumpTimer) {
+        clearTimeout(JumpTimer);
+    }
+    JumpTimer = setTimeout(() => {
+        jumpPageTemp(options, query);
+    }, 200);
+}
+/*
  * 根据page名跳转对应的页面 web测试端/native端
  * @param options {weexPage:'index'}  querystring {id: 9, name:'rrr'}
  */
-function jumpPage(options, query) {
+function jumpPageTemp(options, query) {
     let bundleUrl = weex.config.bundleUrl;
     let platform = weex.config.env.platform;
     if (typeof options === 'string') {
@@ -11,18 +23,17 @@ function jumpPage(options, query) {
          * jump to exact url
          */
         bundleUrl = options;
-        navigatorJump(bundleUrl, query);
     } else if (navigator.gotoPage) {
         /*
          * jump by HelloTalk native
          */
-        navigator.gotoPage(
-            {
-                url: options.weexPage,
-                data: query
-            }, (e) => {
-                console.log(e);
-            });
+        navigator.gotoPage({
+            url: options.weexPage,
+            data: query
+        }, (e) => {
+            console.log(e);
+        });
+        return;
     } else {
         /*
          * jump for test
@@ -30,8 +41,8 @@ function jumpPage(options, query) {
         let weexPage = options.weexPage + (platform === 'Web' ? '.html' : '.js');
         let filePath = bundleUrl.match(/.+\/(.+)$/)[1];
         bundleUrl = bundleUrl.replace(filePath, weexPage);
-        navigatorJump(bundleUrl, query);
     }
+    navigatorJump(bundleUrl, query);
 }
 
 /*
