@@ -1,5 +1,10 @@
 # 模版说明  
-此模板根据weex的官方文件添加属于HelloTalk的的weex项目的特殊需求修改的项目模版  
+此模板根据weex的官方文件添加属于HelloTalk的的weex项目的特殊需求修改的项目模版
+
+## 使用方式
+git clone https://github.com/TuffyLiu/weex-temp.git
+git push --mirror https://github.com/TuffyLiu/新的仓库名.git
+迁移仓库到新的仓库
 ##  特殊性：  
 1.只将pageDir目录（默认为 ./src/page）里的vue文件打包成一个单独的客户端可运行的js文件
 2.添加了 npm run weex 命令来打包文件（默认输出路径：./release/weex/.....js），如需直接上传阿里云，使用npm run weex:release命令  
