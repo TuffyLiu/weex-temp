@@ -35,7 +35,7 @@
     "weex-vue-render": "^1.0.17"
   },
   "devDependencies": {
-    "aliyunoss-webpack-plugin": "^0.2.1",
+    "aliyun-oss-webpack-plugin": "^0.2.1",
     "autoprefixer": "^8.0.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.1",

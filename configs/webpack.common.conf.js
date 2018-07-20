@@ -156,7 +156,7 @@ const webConfig = {
                             }),
                             require('postcss-plugin-px2rem')({
                                 // base on 750px standard.
-                                rootValue: 75 / 2,
+                                rootValue: 75,
                                 // to leave 1px alone.
                                 minPixelValue: 1.01
                             })
