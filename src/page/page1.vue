@@ -12,8 +12,8 @@
 
 <script>
 import {
-    jumpPage
-} from '@/util';
+    utils
+} from '@/utils';
 import HelloWorld from '@/components/components1.vue';
 export default {
     name: 'App',
@@ -28,7 +28,7 @@ export default {
     },
     methods: {
         onClicked(e) {
-            jumpPage({
+            utils.jumpPage({
                 weexPage: 'page2'
             }, {
                 ddd: 33

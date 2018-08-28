@@ -113,7 +113,7 @@ const weexConfig = {
                 use: [{
                     loader: 'babel-loader'
                 }],
-                exclude: config.excludeModuleReg
+                // exclude: config.excludeModuleReg
             },
             {
                 test: /\.vue(\?[^?]+)?$/,
@@ -167,6 +167,7 @@ const productionConfig = webpackMerge(weexConfig, {
          * See: http://webpack.github.io/docs/configuration.html#output-filename
          */
         filename: '[name]_' + packageConfig.version + '_[chunkhash:16].js'
+        // filename: '[name].js'
     },
     /*
      * Add additional plugins to the compiler.

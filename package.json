@@ -31,11 +31,12 @@
   "license": "MIT",
   "dependencies": {
     "phantom-limb": "0.0.1",
+    "customize_xtea": "^1.0.2",
     "vue": "^2.5.11",
     "weex-vue-render": "^1.0.17"
   },
   "devDependencies": {
-    "aliyunoss-webpack-plugin": "^0.2.1",
+    "aliyun-oss-webpack-plugin": "^2.0.1",
     "autoprefixer": "^8.0.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.1",
